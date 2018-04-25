@@ -1,5 +1,6 @@
 import cc.arduino.*;
 import org.firmata.*;
+import java.swing*;
 
 PImage img1;
 PImage img2;
@@ -7,6 +8,13 @@ PImage img3;
 PImage img4;
 
 int h1;
+
+int saldo;
+
+int[] monedas = {5, 10};
+int valorMoneda;
+
+int carrito;
 
 boolean visible1;
 boolean visible2;
@@ -28,17 +36,23 @@ void setup(){
 }
 
 void draw(){
-  fill(255,255,255);
-  textSize(36+h1);
-  text("Selecciona un producto",430,70);
-  image(img1,10,115);
-  image(img2,320,115);
-  image(img3,630,115);
-  image(img4,940,115);
+  if (saldo > 0) {
+      fill(255,255,255);
+      textSize(36+h1);
+      text("Selecciona un producto",430,70);
+      image(img1,10,115);
+      image(img2,320,115);
+      image(img3,630,115);
+      image(img4,940,115);
+  }
+  
+
 }
 
 void loop(){
-  
+  if (saldo > 0) {
+    javax.swing.JOptionPane.showMessageDialog(null, "Moneda ingresada. Valor: " + valorMoneda + " Saldo: " + saldo);
+  }
 }
 
 
@@ -50,17 +64,26 @@ void mousePressed(){
     img4.filter(BLUR,10);
     
     redraw();
-    
+    saldo -= 5;
+    carrito += 1;
   }
   //pluma
   else if((mouseX >= 320 && mouseX <= 620) && (mouseY >= 115 && mouseY <= 415)){ 
+    saldo -= 5;
+    carrito += 1;
   }
   //borrador
   else if((mouseX >= 630 && mouseX <= 930) && (mouseY >= 115 && mouseY <= 415)){
+    saldo -= 5;
+    carrito += 1;
   }
   //sacapuntas
   else if((mouseX >= 940 && mouseX <= 1240) && (mouseY >= 115 && mouseY <= 415)){
+    saldo -= 5;
+    carrito += 1;
+    
   }
+  
   
   delay(2000);
   exit();

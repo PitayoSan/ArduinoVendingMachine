@@ -1,0 +1,84 @@
+import cc.arduino.*;
+import org.firmata.*;
+
+import processing.serial.*;
+import javax.swing.*;
+import java.awt.*;
+
+PImage img1;
+PImage img2;
+PImage img3;
+PImage img4;
+PImage bckg;
+
+Serial myPort;
+char[] instructions = {'1','2','3'};
+
+float a;
+float x1,x2,x3,x4;
+float y1,y2,y3,y4;
+
+int saldo = 5;
+
+
+
+void setup(){
+  size(1250,600);
+  img1 = loadImage("LapizChido.jpg");
+  img2 = loadImage("PlumaChida.jpg");
+  img3 = loadImage("BorradorChido.jpg");
+  img4 = loadImage("sacapuntasChido.jpg");
+  bckg = loadImage("Splashscreen.png");
+  myPort = new Serial(this, "COM3", 9600);
+  noLoop();
+}
+
+void draw(){
+  background(bckg);
+  fill(255,255,255,255-a);
+  textSize(36);
+  text("Selecciona un producto",430,70);
+  fill(255,255,255,a);
+  text("Despachando...",490,70);
+  image(img1,10+x1,115+y1);
+  image(img2,320+x2,115+y2);
+  image(img3,630+x3,115+y3);
+  image(img4,940+x4,115+y4);
+  myPort.write(instructions[0]);
+  myPort.write(instructions[1]);
+
+}
+
+
+
+void mousePressed(){
+  //lapiz
+  if ((mouseX >= 10 && mouseX <= 310) && (mouseY >= 115 && mouseY <= 415)){
+    a += 255;
+    x1 += 465;
+    y2 = y3 = y4 = -415;
+    loop();
+    myPort.write(instructions[1]);
+
+  }
+  //pluma
+  else if((mouseX >= 320 && mouseX <= 620) && (mouseY >= 115 && mouseY <= 415)){ 
+    a += 255;
+    x2 += 155;
+    y1 = y3 = y4 = -415;
+  }
+  //borrador
+  else if((mouseX >= 630 && mouseX <= 930) && (mouseY >= 115 && mouseY <= 415)){
+    a += 255;
+    x3 -= 155;
+    y1 = y2 = y4 = -415;      
+  }
+  //sacapuntas
+  else if((mouseX >= 940 && mouseX <= 1240) && (mouseY >= 115 && mouseY <= 415)){
+    a += 255;
+    x4 -= 465;
+    y1 = y2 = y3 = -415;      
+  }  
+  
+  redraw();
+}

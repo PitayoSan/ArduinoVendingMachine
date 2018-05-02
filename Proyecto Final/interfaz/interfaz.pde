@@ -3,6 +3,17 @@ import processing.serial.*;
 import javax.swing.*;
 import java.awt.*;
 
+import java.io.*;
+ 
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Calendar;
+import java.util.ArrayList;
+
+import java.io.IOException;
+
 
 PImage bckg;
 PImage logo;
@@ -26,6 +37,25 @@ boolean vendido;
 boolean producto;
 boolean[] productos;
 
+//Stock
+int stockLapiz = 0;
+int stockPlumaNegra = 15;
+int stockPlumaAzul = 15;
+int stockBorradores = 0;
+
+//Reporte
+ArrayList lineas = new ArrayList();
+String pathSave;
+
+//Fecha
+Date ahora = new Date();
+SimpleDateFormat sdfFecha = new SimpleDateFormat("dd-MM-yyyy");
+String fecha;
+
+//Tiempo
+Calendar calTiempo;
+SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+String tiempo;
 
 void setup(){
   imagenes = new PImage[6];
@@ -65,29 +95,26 @@ void draw(){
       image(imagenes[1],350+x2,300+y2);
       image(imagenes[2],660+x3,300+y3);
       image(imagenes[3],970+x4,300+y4);
-      delay(1000);
+      delay(2000);
       if(producto){
         for (int i = 0; i < productos.length; i ++){
           if (productos[i] == true){
-            
-            myPort.write(instructions[i]);
-            
+            myPort.write(instructions[i]); 
           }
-          
         }
-        delay(1000);
-        resetear();
-        background(imagenes[4]);
         myPort.write('1');
-
+        resetear();
+        delay(2000);
+        producto = !producto;
+        for (int i = 0; i < productos.length; i ++){
+          productos[i] = false;
+        }
       }
-     
-      
+
     }
     else
     {
       background(imagenes[4]);
-      loop();
     }
 
 }
@@ -113,41 +140,106 @@ void serialEvent(Serial s){
 
 
 void resetear(){
-   a = x1 = x2 = x3 = x4 = y1 = y2 = y3 = y4 = 0;
-   myPort.write('8');
-   noLoop();
-   
+   a = x1 = x2 = x3 = x4 = y1 = y2 = y3 = y4 = 0; 
 }
+
+
 
 void mouseClicked(){
   //lapiz
   if ((mouseX >= 40 && mouseX <= 240) && (mouseY >= 300 && mouseY <= 500)){
-    a += 255;
-    x1 += 465;
-    y2 = y3 = y4 = -615;
-    producto = productos[2] = true;
+    if (stockLapiz >= 1) {
+      a += 255;
+      x1 += 465;
+      y2 = y3 = y4 = -615;
+      producto = productos[2] = true;
+      
+      fecha = sdfFecha.format(ahora);
+      calTiempo = Calendar.getInstance();
+      tiempo = sdfTime.format(calTiempo.getTime());
+      lineas.add(fecha + "," + tiempo + "," + "Lapiz" + "," + "$5");
+
+    } else {
+      JOptionPane.showMessageDialog(null, "Por el momento, no contamos con stock de Lapices");
+    }
   }
   //pluma negra
   else if((mouseX >= 350 && mouseX <= 550) && (mouseY >= 300 && mouseY <= 500)){ 
-    a += 255;
-    x2 += 155;
-    y1 = y3 = y4 = -615;
-    producto = productos[3] = true;
+    if (stockPlumaNegra >= 1) {
+      a += 255;
+      x2 += 155;
+      y1 = y3 = y4 = -615;
+      producto = productos[3] = true;
+      
+      fecha = sdfFecha.format(ahora);
+      calTiempo = Calendar.getInstance();
+      tiempo = sdfTime.format(calTiempo.getTime());
+      lineas.add(fecha + "," + tiempo + "," + "Pluma Negra" + "," + "$5");
+      
+    } else {
+      JOptionPane.showMessageDialog(null, "Por el momento, no contamos con stock de Plumas Negras");
+    }
     
   }
   //pluma azul
-  else if((mouseX >= 630 && mouseX <= 930) && (mouseY >= 115 && mouseY <= 415)){
-    a += 255;
-    x3 -= 155;
-    y1 = y2 = y4 = -615;  
-    producto = productos[4] = true;
+  else if((mouseX >= 630 && mouseX <= 930) && (mouseY >= 300 && mouseY <= 500)){
+    if (stockPlumaAzul >= 1) {
+      a += 255;
+      x3 -= 155;
+      y1 = y2 = y4 = -615;  
+      producto = productos[4] = true;
+      
+      fecha = sdfFecha.format(ahora);
+      calTiempo = Calendar.getInstance();
+      tiempo = sdfTime.format(calTiempo.getTime());
+      lineas.add(fecha + "," + tiempo + "," + "Pluma Azul" + "," + "$5");
+      
+    } else {
+      JOptionPane.showMessageDialog(null, "Por el momento, no contamos con stock de Plumas Azules");
+    }
   }
   //borrador
-  else if((mouseX >= 940 && mouseX <= 1240) && (mouseY >= 115 && mouseY <= 415)){
-    a += 255;
-    x4 -= 465;
-    y1 = y2 = y3 = -615;
-    producto = productos[5] = true;
-  }  
+  else if((mouseX >= 940 && mouseX <= 1240) && (mouseY >= 300 && mouseY <= 500)){
+    if (stockBorradores >= 1) {
+      a += 255;
+      x4 -= 465;
+      y1 = y2 = y3 = -615;
+      producto = productos[5] = true;
+      
+      fecha = sdfFecha.format(ahora);
+      calTiempo = Calendar.getInstance();
+      tiempo = sdfTime.format(calTiempo.getTime());
+      lineas.add(fecha + "," + tiempo + "," + "Borrador" + "," + "$5");
+    } else {
+      JOptionPane.showMessageDialog(null, "Por el momento, no contamos con stock de Borradores");
+    }
+  } else if ((mouseX >= 950 && mouseX <= 1250) && (mouseY >= 500 && mouseY <= 700)) {
+    JFileChooser fc = new JFileChooser();
+    try {
+      fc.showSaveDialog(fc);
+      pathSave = fc.getSelectedFile().getPath();
+      creaReporte(pathSave);
+    } catch (NullPointerException ex) {
+      
+    } catch (IOException ex) {
+      
+    }
+  }
   
+  redraw();
+}
+
+
+  
+
+void creaReporte(String pathSave) throws IOException {
+  PrintWriter pw = new PrintWriter(new FileWriter(pathSave + ".csv"));
+  pw.println("Fecha, Hora, Articulo, Costo");
+  for (int i = 0; i < lineas.size(); i++) {
+    if (lineas.get(i) != "") {
+      pw.println(lineas.get(i));
+    }
+  }
+  JOptionPane.showMessageDialog(null, "El reporte se ha creado con éxito");
+  pw.close();
 }

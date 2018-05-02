@@ -91,40 +91,25 @@ void draw(){
       fill(255,255,255,255-a);
       textFont(font);
       text("Saldo: $" + saldo + ".00",1000, 50);
-      text("Selecciona un producto",410,100);
-      text("¡Todo a 5 pesos!", 460, 200);
+      text("Selecciona un producto",430,100);
+      text("¡Todo a 5 pesos!", 450, 200);
       textSize(24);
       if(stockLapiz > 0){
-        text(stockLapiz + " disponibles", 80, 550);
+        text(stockLapiz + " disponibles", 90, 550);
       }
       else{
         imagenes[0].filter(GRAY);
-        text("no disponible", 80, 550);
+        text("no disponible", 90, 550);
         
       }
       if(stockPlumaNegra > 0){
-        text(stockPlumaNegra + " disponibles", 380, 550);
-      }
-      else{
-        imagenes[1].filter(GRAY);
-        text("no disponible", 380, 550);
-        
+        text(stockPlumaNegra + " disponibles", 400, 550);
       }
       if(stockPlumaAzul > 0){
-        text(stockPlumaAzul + " disponibles", 690, 550);
-      }
-      else{
-        imagenes[2].filter(GRAY);
-        text("no disponible", 690, 550);
-        
+        text(stockPlumaAzul + " disponibles", 700, 550);
       }
       if(stockBorradores > 0){
         text(stockBorradores + " disponibles", 1050, 550);
-      }
-      else{
-        imagenes[3].filter(GRAY);
-        text("no disponible", 1000, 550);
-        
       }
       fill(255,255,255,a);
       text("Despachando...",490,70);

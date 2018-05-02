@@ -61,7 +61,7 @@ void loop() {
       if (val == '5'){          //servo de caida pluma azul
         servoMotor4.write(0);
         delay(500);
-        servoMotor4.write(180);
+        servoMotor4.write(60);
         delay(500);   
       }
       if (val == '6'){

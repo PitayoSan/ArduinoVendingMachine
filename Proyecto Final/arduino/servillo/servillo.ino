@@ -20,6 +20,7 @@ void setup() {
   servoMotor2.attach(10);
   servoMotor3.attach(12);
   servoMotor4.attach(13);
+  servoMotor5.attach(6);
 
 }
 
@@ -43,9 +44,9 @@ void loop() {
         delay(500);  
       }
       if (val == '2'){          //servo de caida monedas 10
-        servoMotor2.write(45);
+        servoMotor2.write(0);
         delay(500);
-        servoMotor2.write(140);
+        servoMotor2.write(180);
         delay(500);  
       }
       if (val == '3'){
@@ -54,7 +55,7 @@ void loop() {
       if (val == '4'){           //servo de caida pluma negra
         servoMotor3.write(0);
         delay(500);
-        servoMotor3.write(180);
+        servoMotor3.write(90);
         delay(500); 
       }
       if (val == '5'){          //servo de caida pluma azul
@@ -67,18 +68,12 @@ void loop() {
         
       }
       if (val == '7'){          //servo de caida cambio 5
-        servoMotor4.write(0);
+        servoMotor5.write(0);
         delay(500);
-        servoMotor4.write(180);
+        servoMotor5.write(180);
         delay(500);   
       }
-      if (val == '8'){
-        servoMotor1.write(0);
-        servoMotor2.write(0);
-        servoMotor3.write(0);
-        servoMotor4.write(0);
-        servoMotor5.write(0);   
-      }
+      
     } 
   }
   else {
